@@ -1,61 +1,15 @@
-package main
+package db
 
 import (
 	"context"
 	"fmt"
 	"log"
-	"net/http"
 	"os"
 
-	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
-
-type PointCoordinate struct {
-	ID uint `json:"id"`
-	Coordinates [2]float32 `json:"coordinates"`
-}
-
-type Point struct {
-	ID string `json:"id"`
-	Type string `json:"type"`
-	Radius uint `json:"radius"`
-	Coordinates [2]float32 `json:"coordinates"`
-}
-
-type LineString struct {
-	ID string `json:"id"`
-	Type string `json:"type"`
-	LineWidth uint `json:"lineWidth"`
-	Coordinates []PointCoordinate `json:"coordinates"`
-}
-
-type Polygon struct {
-	ID string `json:"id"`
-	Type string `json:"type"`
-	LineWidth uint `json:"lineWidth"`
-	Coordinates []PointCoordinate `json:"coordinates"`
-}
-
-
-func createPoint() Point {
-	return Point{
-		ID: "mock-uuid",
-		Type: "Point",
-		Radius: 1,
-		Coordinates: [2]float32{1, 2},
-	}
-}
-
-var geoFences = []Point{
-	createPoint(),
-}
-
-func FetchGeoFences(c *gin.Context) {
-	c.IndentedJSON(http.StatusOK, geoFences)
-}
 
 // Validate the database env vars and return them.
 func getDbVars() (
