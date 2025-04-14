@@ -3,38 +3,15 @@ package main
 import (
 	"fmt"
 	"log"
-	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
 
-type Point struct {
-	ID string `json:"id"`
-	Type string `json:"type"`
-	Radius uint `json:"radius"`
-	Coordinates [2]float32 `json:"coordinates"`
-}
-
-func createPoint() Point {
-	return Point{
-		ID: "mock-uuid",
-		Type: "Point",
-		Radius: 1,
-		Coordinates: [2]float32{1, 2},
-	}
-}
-
-var geoFences = []Point{
-	createPoint(),
-}
-
-func fetchGeoFences(c *gin.Context) {
-	c.IndentedJSON(http.StatusOK, geoFences)
-}
-
+// Entry point of the program.
 func main() {
+	// Initialise dotenv.
 	if godotenv.Load() != nil {
 		log.Fatal("Error loading .env file")
 		os.Exit(1)
@@ -42,8 +19,11 @@ func main() {
 
 	router := gin.Default()
 
-	router.GET("/", fetchGeoFences)
-
+	router.GET("/", FetchGeoFences)
+	router.GET("/:id", FetchGeoFences)
+	router.POST("/", FetchGeoFences)
+	router.PATCH("/:id", FetchGeoFences)
+	router.DELETE("/:id", FetchGeoFences)
 
 	var port = os.Getenv("PORT");
 
