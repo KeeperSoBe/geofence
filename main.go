@@ -1,9 +1,13 @@
 package main
 
 import (
+	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 type Point struct {
@@ -31,7 +35,21 @@ func fetchGeoFences(c *gin.Context) {
 }
 
 func main() {
+	if godotenv.Load() != nil {
+		log.Fatal("Error loading .env file")
+		os.Exit(1)
+	  }
+
 	router := gin.Default()
+
 	router.GET("/", fetchGeoFences)
-	router.Run("localhost:8080")
+
+
+	var port = os.Getenv("PORT");
+
+	if len(port) == 0 {
+		port = "8080"
+	}
+
+	router.Run(fmt.Sprintf("localhost:%s", port))
 }
