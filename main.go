@@ -19,6 +19,7 @@ func main() {
 
 	var application app.App
 
+	application.SetupDB()
 	application.Routes()
-	application.Run();
+	application.Run()
 }
