@@ -2,9 +2,15 @@ package model
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/google/uuid"
 )
+
+// Returns the current datetime in ISO 8601 format.
+func createTimestamp() string {
+	return time.Now().Format(time.RFC3339)
+}
 
 // Defines the shape of a Point entity.
 type Point struct {
@@ -12,6 +18,8 @@ type Point struct {
 	Type string `json:"type"`
 	Radius uint `json:"radius"`
 	Coordinates [2]float32 `json:"coordinates"`
+	CreatedAt string `json:"createdAt"`
+	UpdatedAt string `json:"updatedAt"`
 }
 
 // Defines the shape of a create point request body.
@@ -30,11 +38,15 @@ type UpdatePointDto struct {
 
 // Creates and returns a new Point from a CreatePointDto.
 func CreateNewPoint(createPointDto CreatePointDto) Point {
+	var timestamp string = createTimestamp();
+
 	return Point{
 		ID: uuid.New().String(),
 		Type: *createPointDto.Type,
 		Radius: *createPointDto.Radius,
 		Coordinates: *createPointDto.Coordinates,
+		CreatedAt: timestamp,
+		UpdatedAt: timestamp,
 	}
 }
 
@@ -105,6 +117,7 @@ func ValidateUpdatePointDto(updatePointDto *UpdatePointDto) (*map[string]any, *[
 	if len(validationErrors) > 0 {
 		return nil, &validationErrors
 	} else {
+		model["updatedAt"] = createTimestamp()
 		return &model, nil
 	}
 }
