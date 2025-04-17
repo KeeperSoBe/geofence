@@ -30,8 +30,7 @@ func (app *App) Routes() {
 	router.GET("/", controller.List)
 	router.GET("/:id", controller.Get)
 	router.POST("/", controller.Create)
-	// router.PATCH("/", controller.Patch)
-	// router.PUT("/", controller.Update)
+	router.PATCH("/:id", controller.Update)
 	router.DELETE("/:id", controller.Delete)
 
 	app.Router = router
